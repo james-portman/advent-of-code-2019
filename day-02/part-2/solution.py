@@ -20,39 +20,52 @@ Find the input noun and verb that cause the program to produce the output 196907
 
 import sys
 
-with open("../input.txt") as input_file:
-    input = input_file.read().split(",")
+def attempt(input1, input2):
+    ram = []
 
-# prep
-input[1] = "12"
-input[2] = "2"
+    with open("../input.txt") as input_file:
+        input = input_file.read().split(",")
 
-pc = 0
+    for item in input:
+        ram.append(int(item))
 
-while True:
-    opcode = input[pc]
-    pc += 1
-    print(opcode)
-    if opcode == "1" or opcode == "2":
-        x = int(input[int(input[pc])])
+    # prep
+    ram[1] = input1
+    ram[2] = input2
+
+    pc = 0
+
+    while True:
+        opcode = ram[pc]
         pc += 1
-        y = int(input[int(input[pc])])
-        pc += 1
-        z_addr = input[pc]
-        pc += 1
-        if opcode == "1":
-            z = x + y
-        elif opcode == "2":
-            z = x * y
-        input[int(z_addr)] = z
-        pass
-    elif opcode == "99":
-        print("opcode 99 - exit")
-        print(input[0])
-        break
-    else:
-        print("Unknown opcode, ARGH")
-        print(opcode)
-        sys.exit(1)
+        # print(opcode)
+        if opcode == 1 or opcode == 2:
+            x = ram[ram[pc]]
+            pc += 1
+            y = ram[ram[pc]]
+            pc += 1
+            z_addr = ram[pc]
+            pc += 1
+            if opcode == 1:
+                z = x + y
+            elif opcode == 2:
+                z = x * y
+            ram[z_addr] = z
+            pass
+        elif opcode == 99:
+            # print("opcode 99 - exit")
+            return ram[0]
+        else:
+            print("Unknown opcode, ARGH")
+            print(opcode)
+            sys.exit(1)
 
-# 99 - halt
+for x in range(100):
+    for y in range(100):
+        # print(x,y)
+        result = attempt(x, y)
+        # print(result)
+        if result == 19690720:
+            # print(x, y)
+            print(100 * x + y)
+            sys.exit()
