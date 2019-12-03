@@ -46,7 +46,10 @@ with open("../input.txt") as input_file:
 
 dots = {}
 
+wire_index = 0
 for wire in wires:
+    wire_index += 1
+
     if wire == "":
         break
     x = 0
@@ -68,9 +71,9 @@ for wire in wires:
 
             coord = "%s_%s" % (x, y)
             if coord in dots:
-                dots[coord] += 1
+                dots[coord] = dots[coord] | wire_index # 1 OR 2
             else:
-                dots[coord] = 1
+                dots[coord] = wire_index
 
 # print(dots)
 
@@ -78,7 +81,8 @@ hits = []
 distances = []
 
 for coord, count in dots.iteritems():
-    if count > 1: # wires must cross
+    if count == 3: # wires must cross
+        # print("")
 
         parts = coord.split("_")
         parts[0] = int(parts[0])
@@ -89,25 +93,10 @@ for coord, count in dots.iteritems():
         if parts[1] < 0:
             parts[1] = parts[1] * -1
 
-        print(parts)
+        # print(parts)
         distance = parts[0] + parts[1]
-        print(">",distance)
+        # print("> %s" % distance)
         distances.append(distance)
 
+# print("")
 print(sorted(distances)[0])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#
