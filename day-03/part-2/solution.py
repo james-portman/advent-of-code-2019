@@ -87,43 +87,45 @@ for action_num in range(len(wire_actions[0])): # iterate the right number of tim
             else:
                 dots[coord] = wirenum + 1
 
-print(intersections[0])
+print(intersections)
 
 
 
+totals = []
 
-total_length_moved = 0
 # go through each wire to see exactly how far they both go to reach it
-done = [False, False]
+for i in range(len(intersections)):
+    done = [False, False]
+    for wirenum in [0, 1]:
+        print("wire", wirenum)
+        x = 0
+        y = 0
+        total_length_moved = 0
+        for action_num in range(len(wire_actions[0])): # iterate the right number of times
 
-for wirenum in [0, 1]:
-    x = 0
-    y = 0
-    for action_num in range(len(wire_actions[0])): # iterate the right number of times
-
-        if done[wirenum]:
-            break
-
-        action = wire_actions[wirenum][action_num]
-        # print(action)
-        amount = int(action[1:])
-        for _ in range(amount):
-            if action[0] == "U":
-                y += 1
-            elif action[0] == "D":
-                y -= 1
-            elif action[0] == "L":
-                x -= 1
-            elif action[0] == "R":
-                x += 1
-
-            total_length_moved += 1
-
-            if x == intersections[0]['x'] and y == intersections[0]['y']:
-                print("Hit intersection for a wire")
-                print(total_length_moved)
-                done[wirenum] = True
+            if done[wirenum]:
                 break
 
-print(total_length_moved)
-#
+            action = wire_actions[wirenum][action_num]
+            # print(action)
+            amount = int(action[1:])
+            for _ in range(amount):
+                if action[0] == "U":
+                    y += 1
+                elif action[0] == "D":
+                    y -= 1
+                elif action[0] == "L":
+                    x -= 1
+                elif action[0] == "R":
+                    x += 1
+
+                total_length_moved += 1
+
+                if x == intersections[i]['x'] and y == intersections[i]['y']:
+                    intersections[i]['wire'+str(wirenum)] = total_length_moved
+                    if wirenum == 1:
+                        totals.append(intersections[i]['wire'+str(0)]+intersections[i]['wire'+str(1)])
+
+
+print(intersections)
+print(sorted(totals))
